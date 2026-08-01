@@ -174,6 +174,7 @@ class TestAccountService(TestCase):
        self.assertEqual(result["name"], "Pedrito")
 
     def test_update_Account_not_exist(self):
+        """It should update an account but not exist""" 
         new_account = AccountFactory()
         new_account.id = 1
         response = self.client.put(
@@ -183,4 +184,17 @@ class TestAccountService(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_delete_account(self):
+        """It should Delete an Account"""
+        account = self._create_accounts(1)[0]
+        response = self.client.delete(
+            f"{BASE_URL}/{account.id}"
+        )
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
+    def test_delete_not_exist(self):
+        """It should not found to delete"""
+        response = self.client.delete(
+            f"{BASE_URL}/{1}"
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
