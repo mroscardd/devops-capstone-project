@@ -187,4 +187,4 @@ class TestAccount(unittest.TestCase):
         new_account = Account()
         new_account.deserialize(serial_account)
         self.assertIsNotNone(new_account.date_joined)
-      
+        

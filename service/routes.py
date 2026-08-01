@@ -70,7 +70,7 @@ def list_accounts():
     app.logger.info("Request to list Accounts")
     accounts = Account.all()
     account_list = [account.serialize() for account in accounts]
-    app.logger.info(f"Number of accounts: ${len(account_list)}")
+    app.logger.info(f"Number of accounts: {len(account_list)}")
     return jsonify(account_list), status.HTTP_200_OK
 
 
@@ -84,21 +84,31 @@ def read_account(id):
     Reads an Account
     This endpoint will read an Account based the account_id that is requested
     """
-    app.logger.info(f"Request to read an Account with id: ${id}")
+    app.logger.info(f"Request to read an Account with id: {id}")
     account = Account.find(id)
     if not account:
         abort(status.HTTP_404_NOT_FOUND)
     data = account.serialize()   
-    return (jsonify(data), status.HTTP_200_OK) 
+    return jsonify(data), status.HTTP_200_OK
 
 
 ######################################################################
 # UPDATE AN EXISTING ACCOUNT
 ######################################################################
 
-# ... place you code here to UPDATE an account ...
-
-
+@app.route("/accounts/<int:id>", methods=["PUT"])
+def update_accounts(id):
+    """
+    Update an Account
+    This endpoint will update an Account based on the posted data
+    """
+    app.logger.info(f"Request to update an Account with id: {id}")
+    account = Account.find(id)
+    if not account:
+        abort(status.HTTP_404_NOT_FOUND)
+    account.deserialize(request.get_json()) 
+    account.update()   
+    return jsonify(account.serialize()), status.HTTP_200_OK
 ######################################################################
 # DELETE AN ACCOUNT
 ######################################################################
