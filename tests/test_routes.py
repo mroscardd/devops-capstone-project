@@ -135,10 +135,19 @@ class TestAccountService(TestCase):
         data = response.get_json()
         self.assertEqual(data["name"], account.name)
 
-    def test_account_not_found(self):
+    def test_read_account_not_found(self):
         """It should fail to read a single Account"""
         response = self.client.get(
-            f"{BASE_URL}/{0}",
+            f"{BASE_URL}/{0}"
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
+    def test_get_all_accounts(self):
+        """It should Get a list of Accounts"""
+        self._create_accounts(5)
+        response = self.client.get(
+            BASE_URL
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        self.assertEqual(len(data), 5)
