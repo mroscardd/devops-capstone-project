@@ -175,3 +175,16 @@ class TestAccount(unittest.TestCase):
         """It should not Deserialize an account with a TypeError"""
         account = Account()
         self.assertRaises(DataValidationError, account.deserialize, [])
+
+    def test_deserialize_no_date(self):
+        """It should Deserialize an account with no date_joined"""
+        account = AccountFactory()
+        account.create()
+        serial_account = account.serialize()
+    
+        del serial_account["date_joined"]
+        
+        new_account = Account()
+        new_account.deserialize(serial_account)
+        self.assertIsNotNone(new_account.date_joined)
+      
