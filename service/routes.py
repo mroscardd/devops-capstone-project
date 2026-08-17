@@ -61,6 +61,7 @@ def create_accounts():
 # LIST ALL ACCOUNTS
 ######################################################################
 
+
 @app.route("/accounts", methods=["GET"])
 def list_accounts():
     """
@@ -88,7 +89,7 @@ def read_account(id):
     account = Account.find(id)
     if not account:
         abort(status.HTTP_404_NOT_FOUND)
-    data = account.serialize()   
+    data = account.serialize()
     return jsonify(data), status.HTTP_200_OK
 
 
@@ -106,12 +107,13 @@ def update_accounts(id):
     account = Account.find(id)
     if not account:
         abort(status.HTTP_404_NOT_FOUND)
-    account.deserialize(request.get_json()) 
-    account.update()   
+    account.deserialize(request.get_json())
+    account.update()
     return jsonify(account.serialize()), status.HTTP_200_OK
 ######################################################################
 # DELETE AN ACCOUNT
 ######################################################################
+
 
 @app.route("/accounts/<int:id>", methods=["DELETE"])
 def delete_Account(id):
@@ -119,7 +121,7 @@ def delete_Account(id):
     if not account:
         abort(status.HTTP_404_NOT_FOUND)
     account.delete()
-    return "", status.HTTP_204_NO_CONTENT  
+    return "", status.HTTP_204_NO_CONTENT
 
 
 ######################################################################
@@ -137,4 +139,3 @@ def check_content_type(media_type):
         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
         f"Content-Type must be {media_type}",
     )
-
