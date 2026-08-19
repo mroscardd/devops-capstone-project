@@ -25,6 +25,8 @@ HTTPS_ENVIRON = {'wsgi.url_scheme': 'https'}
 ######################################################################
 #  T E S T   C A S E S
 ######################################################################
+
+
 class TestAccountService(TestCase):
     """Account Service Tests"""
 
@@ -124,7 +126,9 @@ class TestAccountService(TestCase):
             json=account.serialize(),
             content_type="test/html"
         )
-        self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
     # ADD YOUR TEST CASES HERE ...
     def test_read_an_account(self):
@@ -156,34 +160,34 @@ class TestAccountService(TestCase):
         self.assertEqual(len(data), 5)
 
     def test_update_Account(self):
-       """It should update an account""" 
-       account = self._create_accounts(1)[0]
-       response = self.client.post(
-        BASE_URL,
-        json=account.serialize(),
-        content_type="application/json"
-       )
-       self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        """It should update an account"""
+        account = self._create_accounts(1)[0]
+        response = self.client.post(
+            BASE_URL,
+            json=account.serialize(),
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-       new_account = response.get_json()
-       new_account["name"] = "Pedrito"
-       response = self.client.put(
-        f"{BASE_URL}/{new_account['id']}",
-        json=new_account,
-        content_type="application/json"
-       )
-       self.assertEqual(response.status_code, status.HTTP_200_OK)
-       result = response.get_json()
-       self.assertEqual(result["name"], "Pedrito")
+        new_account = response.get_json()
+        new_account["name"] = "Pedrito"
+        response = self.client.put(
+            f"{BASE_URL}/{new_account['id']}",
+            json=new_account,
+            content_type="application/json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        result = response.get_json()
+        self.assertEqual(result["name"], "Pedrito")
 
     def test_update_Account_not_exist(self):
-        """It should update an account but not exist""" 
+        """It should update an account but not exist"""
         new_account = AccountFactory()
         new_account.id = 1
         response = self.client.put(
-         f"{BASE_URL}/{0}",
-         json=new_account.serialize(),
-         content_type="application/json"
+            f"{BASE_URL}/{0}",
+            json=new_account.serialize(),
+            content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -205,8 +209,10 @@ class TestAccountService(TestCase):
     def test_method_not_allowed(self):
         """It should not allow an illegal method call"""
         response = self.client.delete(BASE_URL)
-        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-  
+        self.assertEqual(
+            response.status_code,
+            status.HTTP_405_METHOD_NOT_ALLOWED)
+
     def test_headers_secure(self):
         """It should return secure values"""
         response = self.client.get("/", environ_overrides=HTTPS_ENVIRON)
@@ -215,8 +221,7 @@ class TestAccountService(TestCase):
             'X-Frame-Options': 'SAMEORIGIN',
             'X-Content-Type-Options': 'nosniff',
             'Content-Security-Policy': 'default-src \'self\'; object-src \'none\'',
-            'Referrer-Policy': 'strict-origin-when-cross-origin'
-        }
+            'Referrer-Policy': 'strict-origin-when-cross-origin'}
         for key, value in headers.items():
             self.assertEqual(response.headers.get(key), value)
 
@@ -224,4 +229,5 @@ class TestAccountService(TestCase):
         """It should have cors"""
         response = self.client.get("/", environ_overrides=HTTPS_ENVIRON)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.headers.get('Access-Control-Allow-Origin'), "*")
+        self.assertEqual(response.headers.get(
+            'Access-Control-Allow-Origin'), "*")
