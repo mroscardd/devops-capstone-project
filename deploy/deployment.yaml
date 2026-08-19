@@ -18,7 +18,7 @@ spec:
         app: accounts
     spec:
       containers:
-      - image: us.icr.io/sn-labs-mroscardd/accounts:1
+      - image: IMAGE_NAME
         name: accounts
         resources: {}
         env:
