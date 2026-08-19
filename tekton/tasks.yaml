@@ -65,7 +65,7 @@ spec:
       type: string
       default: "-v"
 
-    - name: database_uri
+    - name: DATABASE_URI
       description: Base  de datos de prueba  
       type: string
       default: "sqlite:///test.db"
