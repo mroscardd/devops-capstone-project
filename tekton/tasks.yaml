@@ -63,12 +63,12 @@ spec:
     - name: args
       description: Argumentos para nose
       type: string
-      default: -v
+      default: "-v"
 
     - name: database_uri
       description: Base  de datos de prueba  
       type: string
-      default: sqlite:///test.db
+      default: "sqlite:///test.db"
 
   steps:
     - name: nosetests
