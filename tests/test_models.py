@@ -151,7 +151,9 @@ class TestAccount(unittest.TestCase):
         self.assertEqual(serial_account["email"], account.email)
         self.assertEqual(serial_account["address"], account.address)
         self.assertEqual(serial_account["phone_number"], account.phone_number)
-        self.assertEqual(serial_account["date_joined"], str(account.date_joined))
+        self.assertEqual(
+            serial_account["date_joined"], str(
+                account.date_joined))
 
     def test_deserialize_an_account(self):
         """It should Deserialize an account"""
@@ -181,10 +183,9 @@ class TestAccount(unittest.TestCase):
         account = AccountFactory()
         account.create()
         serial_account = account.serialize()
-    
+
         del serial_account["date_joined"]
-        
+
         new_account = Account()
         new_account.deserialize(serial_account)
         self.assertIsNotNone(new_account.date_joined)
-        
